@@ -1,5 +1,6 @@
 # custom
 build/*
+data/*
 
 # C++ Template from github
 # Prerequisites
