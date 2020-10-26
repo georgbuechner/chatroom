@@ -45,7 +45,7 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           REQUIRE(resp->body.length() > 0);
         }
 
-        SECTION("Post-Requests to handle registration, works") {
+        SECTION("Post-Requests to handle registration works") {
 
           //Check for correkt response when sending registration-request.
           auto resp = cl.Post("/api/registration", {}, "{\"username\":\"test3\", "
@@ -72,6 +72,22 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
               "application/x-www-form-urlencoded");
           REQUIRE(resp->status == 401);
           REQUIRE(resp->body == "Error parsing Json!");
+        }
+
+        SECTION("Post-Requests to handle login works") {
+          REQUIRE(server.user_manager().GetUserByUsername("test2") != nullptr);
+          auto resp = cl.Post("/api/login", {}, "{\"username\":\"test2\", "
+              "\"password1\":\"password0408\"}", 
+              "application/x-www-form-urlencoded");
+          REQUIRE(resp->status == 401);
+          
+          //Check if cookie has been sent
+          REQUIRE(resp->get_header_value("Set-Cookie").length() > 32);
+
+          //Check if user can be found with this cookie
+          std::string cookie = resp->get_header_value("Set-Cookie");
+          cookie = cookie.substr(0, cookie.find(";"));
+          REQUIRE(server.user_manager().GetUsernameFromCookie(cookie.c_str()) != "");
         }
         server.Stop();
     });
