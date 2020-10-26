@@ -17,6 +17,7 @@ set(SRC_FILES_SERVER
   "src/main.cc"
   "src/server/server_frame.cc"
   "src/users/user_manager.cc"
+  "src/users/user.cc"
   "src/util/func.cc"
 )
 
@@ -25,6 +26,7 @@ set(SRC_FILES_TESTS
   "src/server/server_frame.cc"
   "src/server/test_server.cc"
   "src/users/user_manager.cc"
+  "src/users/user.cc"
   "src/users/test_user_manager.cc"
   "src/util/func.cc"
   "src/util/test_func.cc"

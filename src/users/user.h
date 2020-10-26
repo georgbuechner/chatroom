@@ -5,10 +5,13 @@
 #ifndef CHATROOM_SRC_USERS_USER_H
 #define CHATROOM_SRC_USERS_USER_H
 
+#include <fstream>
 #include <iostream>
 #include <mutex>
 #include <shared_mutex>
 #include <string>
+
+#include <nlohmann/json.hpp>
 
 class User {
   public:
