@@ -65,3 +65,10 @@ TEST_CASE ("User manager can add a user", "[add_user]") {
     REQUIRE(user_exists == true);
   }
 }
+
+TEST_CASE ("UserManager loads at leas test1 and test2 on startup", 
+    "[load_test_users]") {
+  UserManager user_manager;
+  REQUIRE(user_manager.GetUserByUsername("test1") != nullptr);
+  REQUIRE(user_manager.GetUserByUsername("test2") != nullptr);
+}
