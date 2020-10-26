@@ -38,7 +38,7 @@ void ServerFrame::Start(int port) {
   server_.Get("/registration", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/registration.html"), "text/html") ;});
   server_.Get("/chatroom", [&](const Request& req, Response& resp) { 
-        if (CheckLoggedIn(req) == "")
+        if (CheckLoggedIn(req) != "")
           resp.set_content(func::GetPage("web/chatroom.html"), "text/html") ;
         else {
           resp.status = 302;
@@ -52,6 +52,9 @@ void ServerFrame::Start(int port) {
             "application/javascript") ;});
   server_.Get("/web/registration.js", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/registration.js"), 
+            "application/javascript") ;});
+  server_.Get("/web/chatroom.js", [&](const Request& req, Response& resp) { 
+        resp.set_content(func::GetPage("web/chatroom.js"), 
             "application/javascript") ;});
 
   std::cout << "C++ Api server startup successfull!" << std::endl;
@@ -141,6 +144,7 @@ void ServerFrame::DoRegistration(const Request& req, Response& resp) {
 void ServerFrame::DoLogout(const Request& req, Response& resp) {
   std::string username = CheckLoggedIn(req);
   if (username == "") {
+    std::cout << "No Cookie!" << std::endl;
     resp.status = 401;
     return;
   }
