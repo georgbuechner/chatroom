@@ -33,12 +33,24 @@ class ServerFrame {
      */
     void DoRegistration(const httplib::Request& req, httplib::Response& resp);
 
+    /**
+     * @brief Gives feedback on whether server is still running
+     * @return boolean
+     */
     bool IsRunning();
+
+    /**
+     * @brief Makes server stop running.
+     */
     void Stop();
+
+    /**
+     * @brief Destructor, which stops server.
+     */
     ~ServerFrame();
 
   private:
-    httplib::Server server_;
+    httplib::Server server_;  //Server
     UserManager user_manager_; //Manages users.
     mutable std::shared_mutex shared_mutex_user_manager_;
 };
