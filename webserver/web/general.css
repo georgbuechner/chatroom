@@ -1,0 +1,48 @@
+/**
+ * @author georgbuechner
+ */
+
+.centered {
+  margin: auto;
+  margin-top: 10%;
+  width: 30%;
+  padding: 30px;
+  border-radius: 5px;
+  background-color: rgb(240, 230, 240);
+  text-align: center;
+}
+
+.centered h3 {
+  margin-bottom 2rem;
+}
+
+.centered p {
+  font-size: 11px;
+  margin-bottom 2rem;
+}
+
+.centered input {
+  font-size: 11px;
+  margin-bottom: 0.5rem;
+}
+
+.pure_button {
+  padding: 0.4em;
+  width: 5em;
+  border: transparent;
+  text-decoration: none;
+  border-radius: 2px;
+  background-color: grey;
+}
+
+/* ** span classes for checking password strength **  */
+.pw_match{
+  display: none;
+  color: red;
+  font-size: 9px;
+}
+
+.pw_strength {
+  font-size: 9px;
+  color: black;
+}
