@@ -54,6 +54,12 @@ jobs:
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
         cmake --build . --config $BUILD_TYPE
+
+    - name: Create user directory
+      shell: bash
+      run: |
+        mkdir data
+        mkdir data/users/
         
     - name: DO tests
       shell: bash
