@@ -3,6 +3,7 @@
  */
 
 #include "user_manager.h"
+#include "func.h"
 namespace fs = std::filesystem;
 
 UserManager::UserManager() {
@@ -35,7 +36,8 @@ bool UserManager::DoLogin(std::string username, std::string password) const {
   if (users_.count(username) == 0)
     return false;
 
-  //Check whether passwords match.
+  //Check whether passwords match (has password).
+  password = func::hash_sha3_512(password);
   if (password != users_.at(username).get()->password())
     return false;
   return true;
@@ -57,9 +59,10 @@ nlohmann::json UserManager::AddUser(std::string username, std::string pw1,
   if (response.count("error") > 0)
     return response;
 
-  //Add user to map and return success code.
+  //Add new user (hash password) to map and return success code.
   std::unique_lock ul(shared_mutex_users_);
-  users_[username] = std::shared_ptr<User>(new User(username, pw1));
+  users_[username] = std::shared_ptr<User>(new User(username, 
+        func::hash_sha3_512(pw1)));
   try {
     std::cout << "Saving user: " << username << std::endl;
     users_[username].get()->SafeUser();
