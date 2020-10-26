@@ -18,6 +18,12 @@
 
 .centered p {
   font-size: 1em;
+  margin-bottom 2rem;
+}
+
+.centered input {
+  font-size: 1em;
+  margin-bottom: 0.5rem;
 }
 
 .pure_button {

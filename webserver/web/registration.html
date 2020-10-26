@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Chatroom</title>
+    <title>Registration - Chatroom</title>
 
     <!-- <link href="/favicon.png" rel="icon" type="image/png"/> -->
 
@@ -15,16 +15,18 @@
 
   <nav aria-lable="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item active"><a href="">Chatroom</a></li>
+      <li class="breadcrumb-item active"><a href="/">Chatroom</a></li>
+      <li class="breadcrumb-item"><a href="">Registration</a></li>
     </ol>
   </nav>
 
   <div class="centered">
-    <h2>Chatroom</h2>
-    <p>Login or create an account to start chatting.</p> 
-    <button type="button" class="pure_button">login</button>
-    <button type="button" onclick="window.location.href='registration'" 
-      class="pure_button">register</button>
+    <h2>Registration</h2>
+    <p>Create an account.</p> 
+    <input id="username" placeholder="username">
+    <input id="password1" placeholder="password">
+    <input id="password2" placeholder="confirm">
+    <button type="button" class="pure_button">register</button>
   </div>
 
 </body>

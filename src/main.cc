@@ -18,10 +18,14 @@ int main() {
   int start_port = std::stoi("4444");
   std::cout << "Starting on port: " << start_port << std::endl;
 
+
+  
+  //Serves css- and javascrit-files as well as images
   srv.Get("/", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/index.html"), "text/html") ;});
+  srv.Get("/registration", [&](const Request& req, Response& resp) { 
+        resp.set_content(func::GetPage("web/registration.html"), "text/html") ;});
 
-  //Serves css- and javascrit-files as well as images
   srv.Get("/web/general.css", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/general.css"), "text/css") ;});
 
