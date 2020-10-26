@@ -58,6 +58,7 @@ jobs:
     - name: DO tests
       shell: bash
       run: |
-        cd build 
-        mv bin/chatroom_tests.o chatroom_tests.o
+        ls
+        mv build/bin/chatroom_tests.o ../../webserver/chatroom_tests.o
+        cd webserver
         ./chatroom_tests.o
