@@ -12,14 +12,20 @@
 
 #include "server_frame.h"
 
-TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
-  
+void del_test_user(std::string username) {
   //If already exists, delete test data.
   try{
-    std::filesystem::remove("../data/users/test3.json");
+    std::filesystem::remove("../data/users/" + username + ".json");
   }
-  catch(...) { }
+  catch(...) {return; }
+  std::cout << username << " deleted." << std::endl;
+}  
 
+TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
+  
+  del_test_user("test3");
+  del_test_user("test4");
+ 
   ServerFrame server;
 
   std::thread t1([&server]() {
@@ -48,6 +54,7 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
         SECTION("Post-Requests to handle registration works") {
 
           //Check for correkt response when sending registration-request.
+          //try to create test-user
           auto resp = cl.Post("/api/registration", {}, "{\"username\":\"test3\", "
               "\"password1\":\"password0408\", \"password2\":\"password0408\"}", 
               "application/x-www-form-urlencoded");
@@ -77,16 +84,24 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
         SECTION("Post-Requests to handle login works") {
 
           //Require that at least test-data 2 is loaded correctly 
-          REQUIRE(server.user_manager().GetUserByUsername("test2") != nullptr);
+          //Delete potential existing test-user2
+          del_test_user("test3");
+          //Create test-user3
+          auto resp = cl.Post("/api/registration", {}, "{\"username\":\"test4\", "
+              "\"password1\":\"password0408\", \"password2\":\"password0408\"}", 
+              "application/x-www-form-urlencoded");
+          REQUIRE(resp->status == 200);
+
+          REQUIRE(server.user_manager().GetUserByUsername("test4") != nullptr);
           //User cannot log in with wrong password.
-          auto resp = cl.Post("/api/login", {}, "{\"username\":\"test2\", "
+          resp = cl.Post("/api/login", {}, "{\"username\":\"test4\", "
               "\"password\":\"password08\"}", 
               "application/x-www-form-urlencoded");
           REQUIRE(resp->status == 401);
 
           //User can log in with correct password and user-data.
-          resp = cl.Post("/api/login", {}, "{\"username\":\"test2\", "
-              "\"password\":\"passwordpasswordpassword\"}", 
+          resp = cl.Post("/api/login", {}, "{\"username\":\"test4\", "
+              "\"password\":\"password0408\"}", 
               "application/x-www-form-urlencoded");
           REQUIRE(resp->status == 200);
           
