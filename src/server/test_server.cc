@@ -127,6 +127,10 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           auto resp = cl.Get("/chatroom");
           REQUIRE(resp->status == 302);
         }
+
+        SECTION("Post-Requests to send user-msg works") {
+
+        }
         server.Stop();
     });
   t1.join();
