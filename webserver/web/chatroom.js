@@ -35,9 +35,10 @@ function Send() {
   xhttp.onload = function(event){
                                                                                                   
     //If request fails, display message to user.
-    if (xhttp.status != 200) {
+    if (xhttp.status != 200) 
       alert("Sending msg failed.");
-    }                            
+    else
+      document.getElementById("msg").value="";
   };                   
 }
 
@@ -65,4 +66,4 @@ setInterval(function(){
       document.getElementById("chatroom").appendChild(table);
     }    
   };       
-}, 5000);
+}, 2500);
