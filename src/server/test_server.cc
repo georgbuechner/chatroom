@@ -112,6 +112,12 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           std::string cookie = resp->get_header_value("Set-Cookie");
           cookie = cookie.substr(0, cookie.find(";"));
           REQUIRE(server.user_manager().GetUsernameFromCookie(cookie.c_str()) != "");
+
+          //Log this user out.
+          httplib::Headers headers = { { "cookie", cookie } };
+          resp = cl.Post("api/logout", headers, "", "application/x-www-form-urlencoded");
+          REQUIRE(resp->status == 200);
+          REQUIRE(server.user_manager().GetUsernameFromCookie(cookie.c_str()) == "");
         }
 
         SECTION("Post-Requests to handle login works") {
