@@ -35,6 +35,15 @@
   background-color: grey;
 }
 
+.logout_button{
+  padding: 0.1em;
+  width: 5em;
+  border: transparent;
+  text-decoration: none;
+  border-radius: 2px;
+  background-color: grey;
+}
+
 /* ** span classes for checking password strength/match and login-error **  */
 .login_error {
   display: none;

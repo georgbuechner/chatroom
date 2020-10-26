@@ -1,3 +1,4 @@
+
 //Sends request to server and loads chatroom if request is successful.
 function Logout() {
   //Get username, password and password verification from document.
