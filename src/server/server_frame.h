@@ -47,6 +47,14 @@ class ServerFrame {
      */
     void Send(const httplib::Request& req, httplib::Response& resp);
 
+    /**
+     * @brief Sends all messages to client.
+     * @param req
+     * @param resp
+     */
+    void Get(const httplib::Request& req, httplib::Response& resp);
+
+
 
     /**
      * @brief Logout user.

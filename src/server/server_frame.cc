@@ -26,7 +26,8 @@ void ServerFrame::Start(int port) {
   server_.Post("/api/send_msg", [&](const Request& req, Response& resp) { 
       Send(req, resp); });
 
-
+  server_.Post("/api/get_msgs", [&](const Request& req, Response& resp) { 
+      Send(req, resp); });
   
   //Serves css- and javascrit-files as well as images
   server_.Get("/", [&](const Request& req, Response& resp) { 
@@ -157,6 +158,22 @@ void ServerFrame::Send(const Request& req, Response& resp) {
     std::string msg = req.body;
     chatroom_.push_back(std::make_pair(username, msg));
     ul.unlock();
+    resp.status = 200;
+  }
+}
+
+void ServerFrame::Get(const Request& req, Response& resp) {
+  std::string username = CheckLoggedIn(req);
+  if (username == "") {
+    std::cout << "No Cookie!" << std::endl;
+    resp.status = 401;
+  }
+
+  else {
+    std::shared_lock sl(shared_mutex_chatroom_);
+    nlohmann::json response = chatroom_;
+    resp.set_content(response.dump(), "text/txt");
+    sl.unlock();
     resp.status = 200;
   }
 }
