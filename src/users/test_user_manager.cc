@@ -2,6 +2,8 @@
  * @author georgbuechner
  */
 
+#include <fstream>
+
 #include <catch2/catch.hpp>
 #include <nlohmann/json.hpp>
 
@@ -48,5 +50,10 @@ TEST_CASE ("User manager can add a user", "[add_user]") {
     REQUIRE(answer.value("success", false) == true);
     REQUIRE(user_manager.GetUserByUsername(username).get()->username() == 
         username);
+    std::ifstream read("../data/users/" + username + ".json");
+    bool user_exists = false;
+    if (read) user_exists = true;
+    read.close();
+    REQUIRE(user_exists == true);
   }
 }
