@@ -2,20 +2,27 @@
  * @author georgbuechner
  */
 
+#ifndef CHATROOM_SRC_SERVER_H
+#define CHATROOM_SRC_SERVER_H
+
 #include <iostream>
 
 #include <httplib.h>
-
-#include "func.h"
 
 /**
  * Class holding complete server structure.
  */
 class ServerFrame {
   public:
-    ServerFrame(int port);
+    ServerFrame();
     ~ServerFrame();
+
+    void Start(int port);
+    void Stop();
+    bool IsRunning();
 
   private:
     httplib::Server server_;
 };
+
+#endif
