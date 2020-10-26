@@ -23,6 +23,8 @@ void ServerFrame::Start(int port) {
   //Serves css- and javascrit-files as well as images
   server_.Get("/", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/index.html"), "text/html") ;});
+  server_.Get("/login", [&](const Request& req, Response& resp) { 
+        resp.set_content(func::GetPage("web/login.html"), "text/html") ;});
   server_.Get("/registration", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/registration.html"), "text/html") ;});
 
