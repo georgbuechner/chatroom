@@ -26,17 +26,17 @@
   <div class="centered">
     <h3>Registration</h3>
     <p>Create an account.</p> 
-    <input id="username" placeholder="username">
+    <input id="username" placeholder="username"><br>
     <input id="password1" type="password" placeholder="password"
-        oninput="CheckPasswordStrength()">
+                                          oninput="CheckPasswordStrength()"><br>
     <input id="password2" type="password" placeholder="confirm"
         oninput="CheckPasswordMatch()">
     <p id="pw_strength" class="pw_strength">Make sure your password contains
     <span id="big">at least 15 characters</span>, or <span id="small">at least 8
       characters</span>, a <span id="digit">number</span> and a <span
-      id="lower">lowercase letter</span>.</p>
+                                 id="lower">lowercase letter</span>.</p><br>
     <button type="button" id="register" class="pure_button" 
-      onclick="DoRegisttration()">register</button>
+                                        onclick="DoRegisttration()">register</button><br>
     <p id="pw_match" class="pw_match">Password don't match</p>
   </div>
 
