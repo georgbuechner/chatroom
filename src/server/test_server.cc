@@ -81,7 +81,7 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           REQUIRE(resp->body == "Error parsing Json!");
         }
 
-        SECTION("Post-Requests to handle login works") {
+        SECTION("Post-Requests to handle logged in actions") {
 
           //Require that at least test-data 2 is loaded correctly 
           //Delete potential existing test-user2
@@ -113,11 +113,16 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           cookie = cookie.substr(0, cookie.find(";"));
           REQUIRE(server.user_manager().GetUsernameFromCookie(cookie.c_str()) != "");
 
-          //Log this user out.
+          //Create headers with current cookie
           httplib::Headers headers = { { "Cookie", cookie } };
-          std::cout << "Logging out............" << std::endl;
+
+          //Check if user can send messages.
+          resp = cl.Post("/api/send_msg", {}, "Hello, you", 
+              "application/x-www-form-urlencoded");
+          REQUIRE(resp->status == 200);
+
+          //Log this user out.
           resp = cl.Post("/api/logout", headers, "", "application/x-www-form-urlencoded");
-          std::cout << "done." << std::endl;
           REQUIRE(resp->status == 200);
           REQUIRE(server.user_manager().GetUsernameFromCookie(cookie.c_str()) == "");
         }
@@ -128,11 +133,6 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           REQUIRE(resp->status == 302);
         }
 
-        SECTION("Post-Requests to send user-msg works") {
-          auto resp = cl.Post("/api/send_msg", {}, "Hello, you", 
-              "application/x-www-form-urlencoded");
-          REQUIRE(resp->status == 200);
-        }
         server.Stop();
     });
   t1.join();
