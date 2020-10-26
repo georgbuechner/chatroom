@@ -35,7 +35,12 @@
   background-color: grey;
 }
 
-/* ** span classes for checking password strength **  */
+/* ** span classes for checking password strength/match and login-error **  */
+.login_error {
+  display: none;
+  color: red;
+}
+
 .pw_match{
   display: none;
   color: red;

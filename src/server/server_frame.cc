@@ -30,6 +30,9 @@ void ServerFrame::Start(int port) {
 
   server_.Get("/web/general.css", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/general.css"), "text/css") ;});
+  server_.Get("/web/login.js", [&](const Request& req, Response& resp) { 
+        resp.set_content(func::GetPage("web/login.js"), 
+            "application/javascript") ;});
   server_.Get("/web/registration.js", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/registration.js"), 
             "application/javascript") ;});
