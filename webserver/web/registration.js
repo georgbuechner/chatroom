@@ -18,13 +18,13 @@ window.onload = function() {
 function DoRegisttration() {
   //Get username, password and password verification from document.
   var json_request = new Object();
-  json_request.id = document.getElementById("username").value;
+  json_request.username = document.getElementById("username").value;
   json_request.password1 = document.getElementById("password1").value;
   json_request.password2 = document.getElementById("password2").value;
   
   //Send request
   var xhttp = new XMLHttpRequest();
-  xhttp.open("POST", "/api/user_registration");
+  xhttp.open("POST", "/api/registration");
   xhttp.send(JSON.stringify(json_request));
                            
   //Function to handle request     
