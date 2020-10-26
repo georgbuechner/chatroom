@@ -6,6 +6,8 @@
 #define CHATROOM_SRC_USERS_USER_H
 
 #include <iostream>
+#include <mutex>
+#include <shared_mutex>
 #include <string>
 
 class User {
@@ -16,17 +18,25 @@ class User {
      * @param std::string
      * @param password
      */
-    User(std::string username, std::string password) : username_(username) {
-      password_ = password;
-    }
+    User(std::string username, std::string password);
 
-    std::string username() {
-      return username_;
-    }
+    std::string username();
+
+    /**
+     * @brief Saves user to disc.
+     */
+    void SafeUser();
 
   private:
     const std::string username_;
     std::string password_;
+    mutable std::shared_mutex shared_mutex_password_;
+
+    /**
+     * @brief Constructs user-json
+     * @param[in] user (reference to an empty json)
+     */
+    void ConstructJson(nlohmann::json& user) const;
 };
 
 #endif
