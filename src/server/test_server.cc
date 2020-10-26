@@ -3,6 +3,7 @@
  */
 
 #include <chrono>
+#include <filesystem>
 #include <iostream>
 #include <thread>
 
@@ -12,6 +13,12 @@
 #include "server_frame.h"
 
 TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
+  
+  //If already exists, delete test data.
+  try{
+    std::filesystem::remove("../data/user/test3.json");
+  }
+  catch(...) { }
 
   ServerFrame server;
 
@@ -41,7 +48,7 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
         SECTION("Post-Requests to handle registration, works") {
 
           //Check for correkt response when sending registration-request.
-          auto resp = cl.Post("/api/registration", {}, "{\"username\":\"jan\", "
+          auto resp = cl.Post("/api/registration", {}, "{\"username\":\"test3\", "
               "\"password1\":\"password0408\", \"password2\":\"password0408\"}", 
               "application/x-www-form-urlencoded");
           REQUIRE(resp->status == 200);
