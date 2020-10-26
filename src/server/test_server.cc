@@ -75,11 +75,21 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
         }
 
         SECTION("Post-Requests to handle login works") {
+
+          //Require that at least test-data 2 is loaded correctly 
+          //
           REQUIRE(server.user_manager().GetUserByUsername("test2") != nullptr);
+          //User cannot log in with wrong password.
           auto resp = cl.Post("/api/login", {}, "{\"username\":\"test2\", "
-              "\"password1\":\"password0408\"}", 
+              "\"password1\":\"password08\"}", 
               "application/x-www-form-urlencoded");
           REQUIRE(resp->status == 401);
+
+          //User can log in with correct password and user-data.
+          resp = cl.Post("/api/login", {}, "{\"username\":\"test2\", "
+              "\"password1\":\"password0408\"}", 
+              "application/x-www-form-urlencoded");
+          REQUIRE(resp->status == 200);
           
           //Check if cookie has been sent
           REQUIRE(resp->get_header_value("Set-Cookie").length() > 32);
