@@ -27,8 +27,8 @@ TEST_CASE ("User manager can add a user", "[add_user]") {
     REQUIRE(answer.value("error", answer.dump()) == "Username already exists.");
   }
 
+  username = "alex";
   SECTION("Passwords need to match.") {
-    username = "alex";
     password2 = "password123";
     answer = user_manager.AddUser(username, password1, password2);
     REQUIRE(answer.value("error", answer.dump()) == "Passwords don't match.");

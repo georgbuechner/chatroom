@@ -18,14 +18,19 @@ void User::SafeUser() {
   ConstructJson(user);
 
   //Write json to disc.
-  std::ofstream write("../../data/users/" + username_ + ".json");
+  std::string path = "../data/users/" + username_ + ".json";
+  std::ofstream write(path);
   try {
     write << user;
   }
   catch (std::exception& e) {
     std::cout << "Writing user data failed." << std::endl;
+    write.close();
+    return;
   }
   write.close();
+  std::cout << "Saving user json: " << user << " success!" << std::endl;
+  std::cout << "Path: " << path << std::endl;
 }
 
 void User::ConstructJson(nlohmann::json& user) const {

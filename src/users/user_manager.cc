@@ -27,7 +27,13 @@ nlohmann::json UserManager::AddUser(std::string username, std::string pw1,
   //Add user to map and return success code.
   std::unique_lock ul(shared_mutex_users_);
   users_[username] = std::shared_ptr<User>(new User(username, pw1));
-  users_[username].get()->SafeUser();
+  try {
+    std::cout << "Saving user: " << username << std::endl;
+    users_[username].get()->SafeUser();
+  }
+  catch (std::exception& e) {
+    std::cout << "Saving user failed: " << e.what() << std::endl;
+  }
   ul.unlock();
   return nlohmann::json{{"success", true}};
 }
