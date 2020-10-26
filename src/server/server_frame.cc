@@ -2,23 +2,10 @@
  * @author georgbuechner
  */
 
-#include <iostream>
-#include <string>
+#include "server_frame.cc"
 
-#include <httplib.h>
-
-#include "func.h"
-
-using namespace httplib;
-
-int main() {
-  //Creates server
-  Server srv;
-
-  int start_port = std::stoi("4444");
-  std::cout << "Starting on port: " << start_port << std::endl;
-
-
+void ServerFrame::ServerFrame(int port) {
+  std::cout << "Starting on Port: " << port << std::endl;
   
   //Serves css- and javascrit-files as well as images
   srv.Get("/", [&](const Request& req, Response& resp) { 
@@ -33,8 +20,15 @@ int main() {
             "application/javascript") ;});
 
   std::cout << "C++ Api server startup successfull!" << std::endl;
-
-  srv.listen("0.0.0.0", start_port);
-#include <http
-  return 0;
+  srv.listen("0.0.0.0", port);
 }
+
+void ServerFrame::~ServerFrame() {
+  Stop();
+}
+
+void ServerFrame::Stop() {
+  server_.stop();
+}
+
+
