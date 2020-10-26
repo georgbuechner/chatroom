@@ -58,4 +58,4 @@ jobs:
     - name: DO tests
       run: |
         cd webserver
-        chatroom_tests.o
+        ./chatroom_tests.o
