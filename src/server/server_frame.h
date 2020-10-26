@@ -39,13 +39,19 @@ class ServerFrame {
      */
     void DoRegistration(const httplib::Request& req, httplib::Response& resp);
 
+    /**
+     * @brief Logout user.
+     * @param req
+     * @param resp
+     */
+    void DoLogout(const httplib::Request& req, httplib::Response& resp);
 
     /**
      * @brief Check whether user is currently logged in.
      * @param resp
-     * @return boolean
+     * @return username or empty string (if not logged in)
      */
-    bool CheckLoggedIn(const httplib::Request& resp);
+    std::string CheckLoggedIn(const httplib::Request& resp);
 
     /**
      * @brief Gives feedback on whether server is still running

@@ -19,12 +19,16 @@ void ServerFrame::Start(int port) {
 
   server_.Post("/api/login", [&](const Request& req, Response& resp) { 
       DoLogin(req, resp); });
+
+  server_.Post("/api/logout", [&](const Request& req, Response& resp) { 
+      DoLogout(req, resp); });
+
   
   //Serves css- and javascrit-files as well as images
   server_.Get("/", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/index.html"), "text/html") ;});
   server_.Get("/login", [&](const Request& req, Response& resp) { 
-        if (!CheckLoggedIn(req))
+        if (CheckLoggedIn(req) == "")
           resp.set_content(func::GetPage("web/login.html"), "text/html");
         else {
           resp.status = 302;
@@ -34,7 +38,7 @@ void ServerFrame::Start(int port) {
   server_.Get("/registration", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/registration.html"), "text/html") ;});
   server_.Get("/chatroom", [&](const Request& req, Response& resp) { 
-        if (CheckLoggedIn(req))
+        if (CheckLoggedIn(req) == "")
           resp.set_content(func::GetPage("web/chatroom.html"), "text/html") ;
         else {
           resp.status = 302;
@@ -61,7 +65,6 @@ void ServerFrame::DoLogin(const Request& req, Response& resp) {
   catch (std::exception& e) {
     resp.status = 401;
     resp.set_content("Error parsing Json!", "application/json");
-    std::cout << "DoLogin: Parsing failed." << std::endl;
     return;
   }
 
@@ -135,7 +138,19 @@ void ServerFrame::DoRegistration(const Request& req, Response& resp) {
   }
 }
 
-bool ServerFrame::CheckLoggedIn(const Request& req) {
+void ServerFrame::DoLogout(const Request& req, Response& resp) {
+  std::string username = CheckLoggedIn(req);
+  if (username == "") {
+    resp.status = 401;
+    return;
+  }
+  
+  std::unique_lock ul(shared_mutex_user_manager_);
+  user_manager_.EraseCookie(get_header_value(req.headers, "Cookie"));
+  resp.status = 200;
+}
+
+std::string ServerFrame::CheckLoggedIn(const Request& req) {
   //Try to get username from cookie
   const char* ptr = get_header_value(req.headers, "Cookie");
   std::shared_lock sl(shared_mutex_user_manager_);
@@ -143,7 +158,7 @@ bool ServerFrame::CheckLoggedIn(const Request& req) {
   sl.unlock();
 
   //Return true when username is not empty.
-  return username != "";
+  return username;
 }
 
 void ServerFrame::Stop() {

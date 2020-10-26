@@ -38,6 +38,13 @@ class UserManager {
     bool DoLogin(std::string username, std::string password) const;
 
     /**
+     * @brief Erase cookie if exists.
+     * @param username
+     * @param password
+     */
+    void EraseCookie(const char* ptr);
+
+    /**
      * @brief finds and returns user with given username. 
      * Returns nullptr if user does not exist.
      * @param username

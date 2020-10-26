@@ -64,7 +64,6 @@ nlohmann::json UserManager::AddUser(std::string username, std::string pw1,
   users_[username] = std::shared_ptr<User>(new User(username, 
         func::hash_sha3_512(pw1)));
   try {
-    std::cout << "Saving user: " << username << std::endl;
     users_[username].get()->SafeUser();
   }
   catch (std::exception& e) {
@@ -72,6 +71,22 @@ nlohmann::json UserManager::AddUser(std::string username, std::string pw1,
   }
   ul.unlock();
   return nlohmann::json{{"success", true}};
+}
+
+void UserManager::EraseCookie(const char* ptr) {
+  //Check if cookie exists
+  if (!ptr)
+    return;
+  
+  //Parse user-cookie from cookie and check if this user exists
+  std::string cookie = ptr;
+  cookie = cookie.substr(cookie.find("SESSID=")+7);
+
+  //Check if cookie can be found in map.
+  std::unique_lock ul(shared_mutex_cookies_);
+  auto it = cookies_.find(cookie);
+  if (it != cookies_.end())
+    cookies_.erase(it);
 }
 
 std::shared_ptr<User> UserManager::GetUserByUsername(std::string username) 
@@ -85,7 +100,7 @@ std::shared_ptr<User> UserManager::GetUserByUsername(std::string username)
 
 std::string UserManager::GetUsernameFromCookie(const char* ptr) const {
   //check if cookie exists.
-  if (!ptr)
+  if (!ptr) 
     return "";
 
   //Parse user-cookie from cookie and check if this user exists
@@ -96,7 +111,7 @@ std::string UserManager::GetUsernameFromCookie(const char* ptr) const {
     return "";
   return cookies_.at(cookie);
 }
-                                                                                            
+
 std::string UserManager::GenerateCookie(std::string username) {
   //Collect 32 random bytes in Linux provided by /dev/urandom                                     
   std::ifstream ifs("/dev/urandom", std::ios::in|std::ios::binary);
