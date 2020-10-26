@@ -42,16 +42,19 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
 
           //Check for correkt response when sending registration-request.
           auto resp = cl.Post("/api/registration", {}, "{\"username\":\"jan\", "
-              "\"password1\":\"0408\", \"password2\":\"0408\"}", 
+              "\"password1\":\"password0408\", \"password2\":\"password0408\"}", 
               "application/x-www-form-urlencoded");
           REQUIRE(resp->status == 200);
 
           //Check if cookie has been sent
-          REQUIRE(resp->get_header_value("Set-Cookie").length() > 0);
+          REQUIRE(resp->get_header_value("Set-Cookie").length() > 32);
 
           //Check if user can be found with this cookie
-          const char* ptr = resp->get_header_value("Set-Cookie").c_str();
-          REQUIRE(server.user_manager().GetUsernameFromCookie(ptr) != "");
+          std::string cookie = resp->get_header_value("Set-Cookie");
+          cookie = cookie.substr(0, cookie.find(";"));
+          std::cout << "Cookie: " << cookie << std::endl;
+          std::cout << "Cookie: " << cookie.c_str() << std::endl;
+          REQUIRE(server.user_manager().GetUsernameFromCookie(cookie.c_str()) != "");
 
           //Check for Response with missing json entries
           resp = cl.Post("/api/registration", {}, "{}", 

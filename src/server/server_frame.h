@@ -6,6 +6,8 @@
 #define CHATROOM_SRC_SERVER_H
 
 #include <iostream>
+#include <mutex>
+#include <shared_mutex>
 
 #include <httplib.h>
 #include <nlohmann/json.hpp>
@@ -39,7 +41,6 @@ class ServerFrame {
     httplib::Server server_;
     UserManager user_manager_; //Manages users.
     mutable std::shared_mutex shared_mutex_user_manager_;
-
 };
 
 #endif

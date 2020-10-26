@@ -63,8 +63,25 @@ void ServerFrame::DoRegistration(const Request& req, Response& resp) {
     return;
   }
 
-  //If all is okay, do actual registration
-  resp.status = 200;
+  //If all is okay, do actual registration.
+  std::unique_lock ul(shared_mutex_user_manager_);
+  nlohmann::json answer = user_manager_.AddUser(username, password1, password2);
+  ul.unlock();
+
+  //If registration failes, send error-code.
+  if (answer.count("error") > 0) {
+    resp.status = 401;
+    resp.set_content(answer["error"], "application/json");
+  }
+  //Genrate cookie and thus log user in.
+  else {
+    ul.lock();
+    std::string cookie = "SESSID=" + user_manager_.GenerateCookie(username)                         
+       + "; Path=/";
+    ul.unlock();
+    resp.set_header("Set-Cookie", cookie.c_str());
+    resp.status = 200;
+  }
 }
 
 void ServerFrame::Stop() {
