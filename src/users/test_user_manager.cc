@@ -13,33 +13,32 @@
 TEST_CASE ("User manager can add a user", "[add_user]") {
 
   UserManager user_manager;
-  nlohmann::json json;
-  json["username"] = "jan";
-  json["password1"] = "password1234";
-  json["password2"] = "password1234"; 
+  std::string username = "jan";
+  std::string password1 = "password1234";
+  std::string password2 = "password1234"; 
 
-  nlohmann::json answer = user_manager.AddUser(json);
+  nlohmann::json answer = user_manager.AddUser(username, password1, password2);
   REQUIRE(answer["success"] == true);
-  REQUIRE(user_manager.GetUserByUsername(json["username"]) != nullptr);
+  REQUIRE(user_manager.GetUserByUsername(username) != nullptr);
 
-  answer = user_manager.AddUser(json);
+  answer = user_manager.AddUser(username, password1, password2);
   REQUIRE(answer["error"] == "Username already exists.");
 
-  json["username"] = "alex";
-  json["password2"] = "password123";
-  answer = user_manager.AddUser(json);
+  username = "alex";
+  password2 = "password123";
+  answer = user_manager.AddUser(username, password1, password2);
   REQUIRE(answer["error"] == "Passwords don't match.");
-  REQUIRE(user_manager.GetUserByUsername(json["username"]) == nullptr);
+  REQUIRE(user_manager.GetUserByUsername(username) == nullptr);
 
-  json["password1"] = "password";
-  json["password2"] = "password";
-  answer = user_manager.AddUser(json);
+  password1 = "password";
+  password2 = "password";
+  answer = user_manager.AddUser(username, password1, password2);
   REQUIRE(answer["error"] == "Strength insufficient.");
-  REQUIRE(user_manager.GetUserByUsername(json["username"]) == nullptr);
+  REQUIRE(user_manager.GetUserByUsername(username== nullptr);
 
-  json["password1"] = "passwordpasswordpassword";
-  json["password2"] = "passwordpasswordpassword";
-  answer = user_manager.AddUser(json);
+  password1 = "passwordpasswordpassword";
+  password2 = "passwordpasswordpassword";
+  answer = user_manager.AddUser(username, password1, password2);
   REQUIRE(answer["success"] == true);
-  REQUIRE(user_manager.GetUserByUsername(json["username"]) != nullptr);
+  REQUIRE(user_manager.GetUserByUsername(username) != nullptr);
 }
