@@ -14,9 +14,10 @@ class UserManager {
     UserManager() {};
     
     nlohmann::json AddUser(std::string user_name, std::string pw1, 
-        std::string pw2) {
-      return nlohmann::json{};
-    };
+        std::string pw2);
+
+  private:
+    std::map<std::string, std::string> users_;
 };
 
 #endif
