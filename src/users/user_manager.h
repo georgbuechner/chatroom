@@ -5,6 +5,7 @@
 #ifndef CHATROOM_SRC_USERS_USERMANAGER_H
 #define CHATROOM_SRC_USERS_USERMANAGER_H
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <mutex>

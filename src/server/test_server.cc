@@ -16,7 +16,7 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
   
   //If already exists, delete test data.
   try{
-    std::filesystem::remove("../data/user/test3.json");
+    std::filesystem::remove("../data/users/test3.json");
   }
   catch(...) { }
 
@@ -59,8 +59,6 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           //Check if user can be found with this cookie
           std::string cookie = resp->get_header_value("Set-Cookie");
           cookie = cookie.substr(0, cookie.find(";"));
-          std::cout << "Cookie: " << cookie << std::endl;
-          std::cout << "Cookie: " << cookie.c_str() << std::endl;
           REQUIRE(server.user_manager().GetUsernameFromCookie(cookie.c_str()) != "");
 
           //Check for Response with missing json entries

@@ -3,9 +3,31 @@
  */
 
 #include "user_manager.h"
+namespace fs = std::filesystem;
 
 UserManager::UserManager() {
+  for (auto& p : fs::directory_iterator("../data/users")) {
+    //Load user json from disc and try getting username and password.
+    std::ifstream read(p.path());
+    std::string username, password;
+    try {
+      nlohmann::json user;
+      read >> user;
+      username = user["username"];
+      password = user["password"];
+    }
+    catch(std::exception& e) {
+      std::cout << "Problem reading data from user: " << p.path() << std::endl;
+      continue;
+    }
 
+    //Create user and add to map of users.
+    users_[username] = std::shared_ptr<User>(new User(username, password));
+  }
+
+  std::cout << "All users:" << std::endl;
+  for (auto it : users_)
+    std::cout << it.first << std::endl;
 };
 
 nlohmann::json UserManager::AddUser(std::string username, std::string pw1, 

@@ -29,8 +29,6 @@ void User::SafeUser() {
     return;
   }
   write.close();
-  std::cout << "Saving user json: " << user << " success!" << std::endl;
-  std::cout << "Path: " << path << std::endl;
 }
 
 void User::ConstructJson(nlohmann::json& user) const {
