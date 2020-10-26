@@ -18,16 +18,16 @@ nlohmann::json UserManager::AddUser(std::string username, std::string pw1,
   if (!CheckPasswordStrength(pw1))
     return nlohmann::json{{"error", "Strength insufficient."}};
 
-  users_[username] = "";
+  users_[username] = username;
   return nlohmann::json{{"success", true}};
 };
 
-/**    
- * @brief checking password strength    
- * Either 15 characters long, or 8 characters + 1 lowercase + 1 digit.    
- * @param password (given password to check)    
- * @return whether strength is sufficient.    
- */    
+std::string Username::GetUserByUsername(std::string username) {
+  if (users_.count(username) == 0)
+    return users_[username];
+  return "";
+}
+    
 bool UserManager::CheckPasswordStrength(std::string password) const {    
   if (password.length() >= 15) return true;    
   if (password.length() < 8) return false;    

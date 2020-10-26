@@ -23,6 +23,14 @@ class UserManager {
     nlohmann::json AddUser(std::string username, std::string pw1, 
         std::string pw2);
 
+    /**
+     * @brief finds and returns user with given username. 
+     * Returns nullptr if user does not exist.
+     * @param username
+     * @return user or nullptr
+     */
+    std::string GetUserByUsername(std::string username);
+
     /**    
      * @brief checks password strength    
      * Either 15 characters long, or 8 characters + 1 lowercase + 1 digit.    
