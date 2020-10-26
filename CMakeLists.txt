@@ -21,10 +21,11 @@ set(SRC_FILES_SERVER
 
 #add source-files for tests
 set(SRC_FILES_TESTS 
-  "src/server/test_server.cc"
   "src/server/server_frame.cc"
-  "src/util/test_func.cc"
+  "src/server/test_server.cc"
+  "src/users/test_user_manager.cc"
   "src/util/func.cc"
+  "src/util/test_func.cc"
   )
 
 # Specify, location for executables
@@ -36,11 +37,13 @@ add_executable(chatroom_tests.o ${SRC_FILES_TESTS})
 
 target_include_directories(chatroom_server.o PUBLIC
   "src/server"
+  "src/users/"
   "src/util"
 )
 
 target_include_directories(chatroom_tests.o PUBLIC
   "src/server"
+  "src/users"
   "src/util"
   )
 
