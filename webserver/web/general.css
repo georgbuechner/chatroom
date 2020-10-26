@@ -1,0 +1,30 @@
+/**
+ * @author georgbuechner
+ */
+
+.centered {
+  margin: auto;
+  margin-top: 10%;
+  width: 30%;
+  padding: 30px;
+  border-radius: 5px;
+  background-color: rgb(240, 230, 240);
+  text-align: center;
+}
+
+.centered h1 {
+  margin-bottom 2rem;
+}
+
+.centered p {
+  font-size: 1em;
+}
+
+.pure_button {
+  padding: 0.4em;
+  width: 5em;
+  border: transparent;
+  text-decoration: none;
+  border-radius: 2px;
+  background-color: grey;
+}
