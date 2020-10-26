@@ -77,7 +77,6 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
         SECTION("Post-Requests to handle login works") {
 
           //Require that at least test-data 2 is loaded correctly 
-          //
           REQUIRE(server.user_manager().GetUserByUsername("test2") != nullptr);
           //User cannot log in with wrong password.
           auto resp = cl.Post("/api/login", {}, "{\"username\":\"test2\", "
@@ -98,6 +97,12 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           std::string cookie = resp->get_header_value("Set-Cookie");
           cookie = cookie.substr(0, cookie.find(";"));
           REQUIRE(server.user_manager().GetUsernameFromCookie(cookie.c_str()) != "");
+        }
+
+        SECTION("Post-Requests to handle login works") {
+          //Require that user will be redirected to login-page, when not logged.
+          auto resp = cl.Get("/chatroom");
+          REQUIRE(resp->status == 302);
         }
         server.Stop();
     });

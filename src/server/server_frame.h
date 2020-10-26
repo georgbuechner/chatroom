@@ -39,6 +39,14 @@ class ServerFrame {
      */
     void DoRegistration(const httplib::Request& req, httplib::Response& resp);
 
+
+    /**
+     * @brief Check whether user is currently logged in.
+     * @param resp
+     * @return boolean
+     */
+    bool CheckLoggedIn(const httplib::Request& resp);
+
     /**
      * @brief Gives feedback on whether server is still running
      * @return boolean

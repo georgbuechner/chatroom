@@ -24,10 +24,23 @@ void ServerFrame::Start(int port) {
   server_.Get("/", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/index.html"), "text/html") ;});
   server_.Get("/login", [&](const Request& req, Response& resp) { 
-        resp.set_content(func::GetPage("web/login.html"), "text/html") ;});
+        if (!CheckLoggedIn(req))
+          resp.set_content(func::GetPage("web/login.html"), "text/html");
+        else {
+          resp.status = 302;
+          resp.set_header("Location", "/chatroom");
+        }
+      });
   server_.Get("/registration", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/registration.html"), "text/html") ;});
-
+  server_.Get("/chatroom", [&](const Request& req, Response& resp) { 
+        if (CheckLoggedIn(req))
+          resp.set_content(func::GetPage("web/chatroom.html"), "text/html") ;
+        else {
+          resp.status = 302;
+          resp.set_header("Location", "/login");
+        }
+      });
   server_.Get("/web/general.css", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/general.css"), "text/css") ;});
   server_.Get("/web/login.js", [&](const Request& req, Response& resp) { 
@@ -120,6 +133,17 @@ void ServerFrame::DoRegistration(const Request& req, Response& resp) {
     resp.set_header("Set-Cookie", cookie.c_str());
     resp.status = 200;
   }
+}
+
+bool ServerFrame::CheckLoggedIn(const Request& req) {
+  //Try to get username from cookie
+  const char* ptr = get_header_value(req.headers, "Cookie");
+  std::shared_lock sl(shared_mutex_user_manager_);
+  std::string username = user_manager_.GetUsernameFromCookie(ptr);
+  sl.unlock();
+
+  //Return true when username is not empty.
+  return username != "";
 }
 
 void ServerFrame::Stop() {
