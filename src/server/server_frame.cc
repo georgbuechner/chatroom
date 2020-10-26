@@ -23,6 +23,10 @@ void ServerFrame::Start(int port) {
   server_.Post("/api/logout", [&](const Request& req, Response& resp) { 
       DoLogout(req, resp); });
 
+  server_.Post("/api/send_msg", [&](const Request& req, Response& resp) { 
+      Send(req, resp); });
+
+
   
   //Serves css- and javascrit-files as well as images
   server_.Get("/", [&](const Request& req, Response& resp) { 
@@ -137,6 +141,22 @@ void ServerFrame::DoRegistration(const Request& req, Response& resp) {
        + "; Path=/";
     ul.unlock();
     resp.set_header("Set-Cookie", cookie.c_str());
+    resp.status = 200;
+  }
+}
+
+void ServerFrame::Send(const Request& req, Response& resp) {
+  std::string username = CheckLoggedIn(req);
+  if (username == "") {
+    std::cout << "No Cookie!" << std::endl;
+    resp.status = 401;
+  }
+
+  else {
+    std::unique_lock ul(shared_mutex_chatroom_);
+    std::string msg = req.body;
+    chatroom_.push_back(std::make_pair(username, msg));
+    ul.unlock();
     resp.status = 200;
   }
 }

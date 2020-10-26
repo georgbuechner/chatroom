@@ -8,6 +8,7 @@
 #include <iostream>
 #include <mutex>
 #include <shared_mutex>
+#include <vector>
 
 #include <httplib.h>
 #include <nlohmann/json.hpp>
@@ -38,6 +39,14 @@ class ServerFrame {
      * @param resp
      */
     void DoRegistration(const httplib::Request& req, httplib::Response& resp);
+
+    /**
+     * @brief Handles a sent message from user.
+     * @param req
+     * @param resp
+     */
+    void Send(const httplib::Request& req, httplib::Response& resp);
+
 
     /**
      * @brief Logout user.
@@ -73,6 +82,9 @@ class ServerFrame {
     httplib::Server server_;  //Server
     UserManager user_manager_; //Manages users.
     mutable std::shared_mutex shared_mutex_user_manager_;
+    typedef std::pair<std::string, std::string> message;
+    std::vector<message> chatroom_;
+    mutable std::shared_mutex shared_mutex_chatroom_;
 };
 
 #endif
