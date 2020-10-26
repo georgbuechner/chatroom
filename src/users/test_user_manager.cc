@@ -19,7 +19,8 @@ TEST_CASE ("User manager can add a user", "[add_user]") {
   SECTION("Adding a user correctly works.") {
     answer = user_manager.AddUser(username, password1, password2);
     REQUIRE(answer["success"] == true);
-    REQUIRE(user_manager.GetUserByUsername(username)->username() == username);
+    REQUIRE(user_manager.GetUserByUsername(username).get()->username() == 
+        username);
     answer = user_manager.AddUser(username, password1, password2);
     REQUIRE(answer.value("error", answer.dump()) == "Username already exists.");
   }
@@ -45,6 +46,7 @@ TEST_CASE ("User manager can add a user", "[add_user]") {
     password2 = "passwordpasswordpassword";
     answer = user_manager.AddUser(username, password1, password2);
     REQUIRE(answer.value("success", false) == true);
-    REQUIRE(user_manager.GetUserByUsername(username)->username() == username);
+    REQUIRE(user_manager.GetUserByUsername(username).get()->username() == 
+        username);
   }
 }

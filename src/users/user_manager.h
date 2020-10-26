@@ -11,6 +11,8 @@
 #include <string>
 #include <nlohmann/json.hpp>
 
+#include "user.h"
+
 class UserManager {
   public:
     UserManager();
@@ -31,7 +33,7 @@ class UserManager {
      * @param username
      * @return user or nullptr
      */
-    std::string GetUserByUsername(std::string username);
+    std::shared_ptr<User> GetUserByUsername(std::string username);
 
     /**    
      * @brief checks password strength    
@@ -42,7 +44,7 @@ class UserManager {
     bool CheckPasswordStrength(std::string password) const;
 
   private:
-    std::map<std::string, std::string> users_;  //Map of users by username.
+    std::map<std::string, std::shared_ptr<User>> users_;  //Map of users by username.
     mutable std::shared_mutex shared_mutex_users_;  
 };
 

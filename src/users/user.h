@@ -16,9 +16,13 @@ class User {
      * @param std::string
      * @param password
      */
-    User(std::string username, std::string password);
+    User(std::string username, std::string password) : username_(username) {
+      password_ = password;
+    }
 
-    std::string username();
+    std::string username() {
+      return username_;
+    }
 
   private:
     const std::string username_;

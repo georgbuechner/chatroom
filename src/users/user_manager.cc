@@ -24,16 +24,16 @@ nlohmann::json UserManager::AddUser(std::string username, std::string pw1,
     return response;
 
   std::unique_lock ul(shared_mutex_users_);
-  users_[username] = username;
+  users_[username] = std::shared_ptr<User>(new User(username, pw1));
   std::cout << "Added user to users: " << username << std::endl;
   std::cout << "Users: " << users_.size() << std::endl;
   ul.unlock();
   return nlohmann::json{{"success", true}};
 };
 
-std::string UserManager::GetUserByUsername(std::string username) {
+std::shared_ptr<User> UserManager::GetUserByUsername(std::string username) {
   if (users_.count(username) == 0)
-    return "";
+    return nullptr;
   return users_[username];
 }
     
