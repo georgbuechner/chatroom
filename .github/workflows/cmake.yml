@@ -59,4 +59,5 @@ jobs:
       shell: bash
       run: |
         cd build 
-        bin/chatroom_tests.o
+        mv bin/chatroom_tests.p chatroom_tests.o
+        ./chatroom_tests.o
