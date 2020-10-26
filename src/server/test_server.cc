@@ -129,7 +129,9 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
         }
 
         SECTION("Post-Requests to send user-msg works") {
-
+          auto resp = cl.Post("/api/send_msg", {}, "Hello, you", 
+              "application/x-www-form-urlencoded");
+          REQUIRE(resp->status == 200);
         }
         server.Stop();
     });
