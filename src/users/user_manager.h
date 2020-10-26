@@ -39,13 +39,13 @@ class UserManager {
     /**                                                                                       
      * @brief returns username from cookie.
      * @param[in] ptr (pointer to cookie)                                                
-     * @return username, "$no_cookie" or "$no_user"                                                 
+     * @return username or empty string 
      */
     std::string GetUsernameFromCookie(const char* ptr) const;
 
      /**                                                                                       
-      * @brief Create random 32 characters to generates cookie. And maps 
-      * cookie and given user.
+      * @brief Generates cookie and maps user to cookie.
+      * Creates random 32 characters to generates cookie.
       * @param[in] username (username which is mapped on cookie)                               
       * @return returns cookie as string.                                                      
       */                                                                                       
@@ -54,6 +54,7 @@ class UserManager {
     /**    
      * @brief checks password strength    
      * Either 15 characters long, or 8 characters + 1 lowercase + 1 digit.    
+     * (Github uses a similar approach) 
      * @param password (given password to check)    
      * @return whether strength is sufficient.    
      */    

@@ -12,7 +12,7 @@ nlohmann::json UserManager::AddUser(std::string username, std::string pw1,
     std::string pw2) {
   nlohmann::json response; 
 
-  //Check if 
+  //Check if user-input matches requirements.
   std::shared_lock sl(shared_mutex_users_);
   if (users_.count(username) > 0)
     response = nlohmann::json{{"error", "Username already exists."}};
@@ -24,15 +24,16 @@ nlohmann::json UserManager::AddUser(std::string username, std::string pw1,
   if (response.count("error") > 0)
     return response;
 
+  //Add user to map and return success code.
   std::unique_lock ul(shared_mutex_users_);
   users_[username] = std::shared_ptr<User>(new User(username, pw1));
-  std::cout << "Added user to users: " << username << std::endl;
-  std::cout << "Users: " << users_.size() << std::endl;
   ul.unlock();
   return nlohmann::json{{"success", true}};
 }
 
-std::shared_ptr<User> UserManager::GetUserByUsername(std::string username) const {
+std::shared_ptr<User> UserManager::GetUserByUsername(std::string username) 
+    const {
+  //Check if user exists, if so, return shared pointer to user.
   if (users_.count(username) == 0)
     return nullptr;
   return users_.at(username);
@@ -52,7 +53,6 @@ std::string UserManager::GetUsernameFromCookie(const char* ptr) const {
     return "";
   return cookies_.at(cookie);
 }
-
                                                                                             
 std::string UserManager::GenerateCookie(std::string username) {
   //Collect 32 random bytes in Linux provided by /dev/urandom                                     
