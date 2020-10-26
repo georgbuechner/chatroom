@@ -52,6 +52,6 @@ target_include_directories(chatroom_tests.o PUBLIC
   )
 
 #Add conan files as linked libraries
-target_link_libraries(chatroom_server.o PUBLIC ${CONAN_LIBS} stdc++)
-target_link_libraries(chatroom_tests.o PUBLIC ${CONAN_LIBS} stdc++)
+target_link_libraries(chatroom_server.o PUBLIC ${CONAN_LIBS} stdc++ n)
+target_link_libraries(chatroom_tests.o PUBLIC ${CONAN_LIBS} stdc++ n)
 
