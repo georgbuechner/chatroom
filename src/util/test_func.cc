@@ -4,7 +4,6 @@
 
 #define CATCH_CONFIG_MAIN
 
-#include <fstream>
 #include <catch2/catch.hpp>
 
 #include "func.h"
