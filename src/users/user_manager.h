@@ -5,6 +5,7 @@
 #ifndef CHATROOM_SRC_USERS_USERMANAGER_H
 #define CHATROOM_SRC_USERS_USERMANAGER_H
 
+#include <fstream>
 #include <iostream>
 #include <mutex>
 #include <shared_mutex>
@@ -33,7 +34,22 @@ class UserManager {
      * @param username
      * @return user or nullptr
      */
-    std::shared_ptr<User> GetUserByUsername(std::string username);
+    std::shared_ptr<User> GetUserByUsername(std::string username) const;
+
+    /**                                                                                       
+     * @brief returns username from cookie.
+     * @param[in] ptr (pointer to cookie)                                                
+     * @return username, "$no_cookie" or "$no_user"                                                 
+     */
+    std::string GetUsernameFromCookie(const char* ptr) const;
+
+     /**                                                                                       
+      * @brief Create random 32 characters to generates cookie. And maps 
+      * cookie and given user.
+      * @param[in] username (username which is mapped on cookie)                               
+      * @return returns cookie as string.                                                      
+      */                                                                                       
+    std::string GenerateCookie(std::string username);                                         
 
     /**    
      * @brief checks password strength    
@@ -46,6 +62,8 @@ class UserManager {
   private:
     std::map<std::string, std::shared_ptr<User>> users_;  //Map of users by username.
     mutable std::shared_mutex shared_mutex_users_;  
+    std::map<std::string, std::string> cookies_;  //Map of users by cookie.
+    mutable std::shared_mutex shared_mutex_cookies_;  
 };
 
 #endif
