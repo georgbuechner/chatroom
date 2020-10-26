@@ -59,6 +59,6 @@ jobs:
       shell: bash
       run: |
         ls
-        mv build/bin/chatroom_tests.o ../../webserver/chatroom_tests.o
+        mv build/bin/chatroom_tests.o webserver/chatroom_tests.o
         cd webserver
         ./chatroom_tests.o
