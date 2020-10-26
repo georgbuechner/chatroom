@@ -10,6 +10,8 @@
 #include <httplib.h>
 #include <nlohmann/json.hpp>
 
+#include "user_manager.h"
+
 /**
  * Class holding complete server structure.
  */
@@ -18,6 +20,8 @@ class ServerFrame {
     ServerFrame();
 
     void Start(int port);
+
+    UserManager& user_manager() { return user_manager_; }
   
     /**
      * @brief Registers the user, if all data is supplied.
@@ -33,6 +37,9 @@ class ServerFrame {
 
   private:
     httplib::Server server_;
+    UserManager user_manager_; //Manages users.
+    mutable std::shared_mutex shared_mutex_user_manager_;
+
 };
 
 #endif

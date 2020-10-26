@@ -47,11 +47,11 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           REQUIRE(resp->status == 200);
 
           //Check if cookie has been sent
-          REQUIRE(resp->get_header_value("Set-Cookie").length() > 32);
+          REQUIRE(resp->get_header_value("Set-Cookie").length() > 0);
 
           //Check if user can be found with this cookie
           const char* ptr = resp->get_header_value("Set-Cookie").c_str();
-          REQUIRE(server.GetUserManager().GetUsernameFromCookie(ptr) != "");
+          REQUIRE(server.user_manager().GetUsernameFromCookie(ptr) != "");
 
           //Check for Response with missing json entries
           resp = cl.Post("/api/registration", {}, "{}", 
