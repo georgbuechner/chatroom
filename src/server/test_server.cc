@@ -27,12 +27,27 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
         httplib::Client cl("localhost", 4444);
         cl.set_connection_timeout(2);
 
-        auto resp = cl.Get("/humbug");
-        REQUIRE(resp->status == 404);
+        SECTION("Get-request serving files works!") {
+          auto resp = cl.Get("/humbug");
+          REQUIRE(resp->status == 404);
 
-        resp = cl.Get("/");
-        REQUIRE(resp->status == 200);
-        REQUIRE(resp->body.length() > 0);
+          resp = cl.Get("/");
+          REQUIRE(resp->status == 200);
+          REQUIRE(resp->body.length() > 0);
+        }
+        SECTION("Post-Requests to handle registration, works") {
+          auto resp = cl.Post("/api/registration", {}, "{\"username\":\"jan\", \"password1\":\"0408\", \"password2\":\"0408\"}", "application/x-www-form-urlencoded");
+          REQUIRE(resp->status == 200);
+
+          resp = cl.Post("/api/registration", {}, "{}", "application/x-www-form-urlencoded");
+          REQUIRE(resp->status == 401);
+          REQUIRE(resp->body == "Wrong json format: missing entries!");
+
+          resp = cl.Post("/api/registration", {}, "{password:xxx}", 
+              "application/x-www-form-urlencoded");
+          REQUIRE(resp->status == 401);
+          REQUIRE(resp->body == "Error parsing Json!");
+        }
         server.Stop();
     });
   t1.join();
