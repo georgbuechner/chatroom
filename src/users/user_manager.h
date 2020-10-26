@@ -6,6 +6,8 @@
 #define CHATROOM_SRC_USERS_USERMANAGER_H
 
 #include <iostream>
+#include <mutex>
+#include <shared_mutex>
 #include <string>
 #include <nlohmann/json.hpp>
 
@@ -40,7 +42,8 @@ class UserManager {
     bool CheckPasswordStrength(std::string password) const;
 
   private:
-    std::map<std::string, std::string> users_;
+    std::map<std::string, std::string> users_;  //Map of users by username.
+    mutable std::shared_mutex shared_mutex_users_;  
 };
 
 #endif

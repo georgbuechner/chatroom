@@ -11,21 +11,30 @@ UserManager::UserManager() {
 nlohmann::json UserManager::AddUser(std::string username, std::string pw1, 
     std::string pw2) {
   
+  nlohmann::json response;
+  std::shared_lock sl(shared_mutex_users_);
   if (users_.count(username) > 0)
-    return nlohmann::json{{"error", "Username already exists."}};
-  if (pw1 != pw2)
-    return nlohmann::json{{"error", "Passwords don't match."}};
-  if (!CheckPasswordStrength(pw1))
-    return nlohmann::json{{"error", "Strength insufficient."}};
+    response = nlohmann::json{{"error", "Username already exists."}};
+  else if (pw1 != pw2)
+    response = nlohmann::json{{"error", "Passwords don't match."}};
+  else if (!CheckPasswordStrength(pw1))
+    response = nlohmann::json{{"error", "Strength insufficient."}};
+  sl.unlock();
+  if (response.count("error") > 0)
+    return response;
 
+  std::unique_lock ul(shared_mutex_users_);
   users_[username] = username;
+  std::cout << "Added user to users: " << username << std::endl;
+  std::cout << "Users: " << users_.size() << std::endl;
+  ul.unlock();
   return nlohmann::json{{"success", true}};
 };
 
-std::string Username::GetUserByUsername(std::string username) {
+std::string UserManager::GetUserByUsername(std::string username) {
   if (users_.count(username) == 0)
-    return users_[username];
-  return "";
+    return "";
+  return users_[username];
 }
     
 bool UserManager::CheckPasswordStrength(std::string password) const {    
