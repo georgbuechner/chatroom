@@ -8,8 +8,13 @@ User::User(std::string username, std::string password) : username_(username) {
   password_ = password;
 }
 
-std::string User::username() {
+std::string User::username() const {
   return username_;
+}
+
+std::string User::password() const {
+  std::shared_lock sl(shared_mutex_password_);
+  return password_;
 }
 
 void User::SafeUser() {

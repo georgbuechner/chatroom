@@ -23,7 +23,8 @@ class User {
      */
     User(std::string username, std::string password);
 
-    std::string username();
+    std::string username() const;
+    std::string password() const;
 
     /**
      * @brief Saves user to disc.

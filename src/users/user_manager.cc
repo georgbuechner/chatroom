@@ -30,6 +30,17 @@ UserManager::UserManager() {
     std::cout << it.first << std::endl;
 };
 
+bool UserManager::DoLogin(std::string username, std::string password) const {
+  //Check whether user exists
+  if (users_.count(username) == 0)
+    return false;
+
+  //Check whether passwords match.
+  if (password != users_.at(username).get()->password())
+    return false;
+  return true;
+}
+
 nlohmann::json UserManager::AddUser(std::string username, std::string pw1, 
     std::string pw2) {
   nlohmann::json response; 

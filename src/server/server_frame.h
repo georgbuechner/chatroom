@@ -26,8 +26,14 @@ class ServerFrame {
     UserManager& user_manager() { return user_manager_; }
   
     /**
+     * @brief Logs in user, if all data is supplied.
+     * @param req
+     * @param resp
+     */
+    void DoLogin(const httplib::Request& req, httplib::Response& resp);
+
+    /**
      * @brief Registers the user, if all data is supplied.
-     * TODO (georgbuechner): check matching passwords and password strength.
      * @param req
      * @param resp
      */
