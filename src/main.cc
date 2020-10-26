@@ -28,6 +28,10 @@ int main() {
 
   srv.Get("/web/general.css", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/general.css"), "text/css") ;});
+  srv.Get("/web/registration.js", [&](const Request& req, Response& resp) { 
+        resp.set_content(func::GetPage("web/registration.js"), 
+            "application/javascript") ;});
+
 
   std::cout << "C++ Api server startup successfull!" << std::endl;
 

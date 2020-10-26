@@ -12,17 +12,17 @@
   text-align: center;
 }
 
-.centered h1 {
+.centered h3 {
   margin-bottom 2rem;
 }
 
 .centered p {
-  font-size: 1em;
+  font-size: 11px;
   margin-bottom 2rem;
 }
 
 .centered input {
-  font-size: 1em;
+  font-size: 11px;
   margin-bottom: 0.5rem;
 }
 
@@ -33,4 +33,16 @@
   text-decoration: none;
   border-radius: 2px;
   background-color: grey;
+}
+
+/* ** span classes for checking password strength **  */
+.pw_match{
+  display: none;
+  color: red;
+  font-size: 9px;
+}
+
+.pw_strength {
+  font-size: 9px;
+  color: black;
 }
