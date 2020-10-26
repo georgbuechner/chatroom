@@ -6,6 +6,7 @@
 #include <nlohmann/json.hpp>
 
 #include "user_manager.h"
+#include "user.h"
 
 TEST_CASE ("User manager can add a user", "[add_user]") {
 
@@ -18,7 +19,7 @@ TEST_CASE ("User manager can add a user", "[add_user]") {
   SECTION("Adding a user correctly works.") {
     answer = user_manager.AddUser(username, password1, password2);
     REQUIRE(answer["success"] == true);
-    REQUIRE(user_manager.GetUserByUsername(username) == username);
+    REQUIRE(user_manager.GetUserByUsername(username)->username() == username);
     answer = user_manager.AddUser(username, password1, password2);
     REQUIRE(answer.value("error", answer.dump()) == "Username already exists.");
   }
@@ -28,7 +29,7 @@ TEST_CASE ("User manager can add a user", "[add_user]") {
     password2 = "password123";
     answer = user_manager.AddUser(username, password1, password2);
     REQUIRE(answer.value("error", answer.dump()) == "Passwords don't match.");
-    REQUIRE(user_manager.GetUserByUsername(username) == "");
+    REQUIRE(user_manager.GetUserByUsername(username) == nullptr);
   }
 
   SECTION("Passwords need to have sufficient strength.") {
@@ -36,7 +37,7 @@ TEST_CASE ("User manager can add a user", "[add_user]") {
     password2 = "password";
     answer = user_manager.AddUser(username, password1, password2);
     REQUIRE(answer.value("error", answer.dump()) == "Strength insufficient.");
-    REQUIRE(user_manager.GetUserByUsername(username) == "");
+    REQUIRE(user_manager.GetUserByUsername(username) == nullptr);
   }
 
   SECTION("Adding second users works as expected.") {
@@ -44,6 +45,6 @@ TEST_CASE ("User manager can add a user", "[add_user]") {
     password2 = "passwordpasswordpassword";
     answer = user_manager.AddUser(username, password1, password2);
     REQUIRE(answer.value("success", false) == true);
-    REQUIRE(user_manager.GetUserByUsername(username) != "");
+    REQUIRE(user_manager.GetUserByUsername(username)->username() == username);
   }
 }
