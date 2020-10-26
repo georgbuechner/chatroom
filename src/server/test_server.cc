@@ -124,6 +124,7 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           resp = cl.Post("/api/get_msgs", headers, "Hello, you", 
               "application/x-www-form-urlencoded");
           REQUIRE(resp->status == 200);
+          std::cout << "Messagejson: " << resp->body << std::endl;
           REQUIRE(resp->body.find("Hello, you") != std::string::npos);
 
           //Log this user out.

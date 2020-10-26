@@ -27,7 +27,7 @@ void ServerFrame::Start(int port) {
       Send(req, resp); });
 
   server_.Post("/api/get_msgs", [&](const Request& req, Response& resp) { 
-      Send(req, resp); });
+      Get(req, resp); });
   
   //Serves css- and javascrit-files as well as images
   server_.Get("/", [&](const Request& req, Response& resp) { 
