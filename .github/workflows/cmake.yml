@@ -56,6 +56,7 @@ jobs:
         cmake --build . --config $BUILD_TYPE
         
     - name: DO tests
+      shell: bash
       run: |
-        cd webserver
-        ./chatroom_tests.o
+        cd build 
+        bin/chatroom_tests.o
