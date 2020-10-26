@@ -20,6 +20,8 @@ set(SRC_FILES_SERVER
 
 # add source-files for tests
 set(SRC_FILES_TESTS 
+  "src/server/test_server.cc"
+  "src/server/server_frame.cc"
   "src/util/test_func.cc"
   "src/util/func.cc"
 )
@@ -36,6 +38,7 @@ target_include_directories(chatroom_server.o PUBLIC
 )
 
 target_include_directories(chatroom_tests.o PUBLIC
+  "src/server"
   "src/util"
 )
 

@@ -32,10 +32,8 @@ int main() {
         resp.set_content(func::GetPage("web/registration.js"), 
             "application/javascript") ;});
 
-
   std::cout << "C++ Api server startup successfull!" << std::endl;
 
   srv.listen("0.0.0.0", start_port);
   return 0;
 }
-
