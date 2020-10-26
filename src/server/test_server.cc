@@ -117,7 +117,7 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           httplib::Headers headers = { { "Cookie", cookie } };
 
           //Check if user can send messages.
-          resp = cl.Post("/api/send_msg", {}, "Hello, you", 
+          resp = cl.Post("/api/send_msg", headers, "Hello, you", 
               "application/x-www-form-urlencoded");
           REQUIRE(resp->status == 200);
 
