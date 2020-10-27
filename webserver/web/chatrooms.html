@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Login - Chatroom</title>
+    <title>Chatroom</title>
 
     <!-- <link href="/favicon.png" rel="icon" type="image/png"/> -->
 
@@ -11,7 +11,7 @@
     <link href="/web/general.css" rel="stylesheet">
 
     <!-- javascript -->
-    <script src="web/login.js"></script>
+    <script src="web/chatroom.js"></script>
 </head>
 
 <body>
@@ -19,16 +19,17 @@
   <nav aria-lable="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/">Home</a></li>
-      <li class="breadcrumb-item active"><a href="/login">Login</a></li>
+      <li class="breadcrumb-item"><a href="/login">Login</a></li>
+      <li class="breadcrumb-item active"><Chatrooms</a></li>
     </ol>
   </nav>
 
   <div class="centered">
-    <h3>Login</h3>
-    <input id="username" placeholder="username"><br>
-    <input id="password" type="password" placeholder="password"><br>
-    <button type="button" id="login" class="pure_button" 
-                                     onclick="DoLogin()">Login</button><br>
-    <p id="login_error" class="login_error">Password or Username incorrect.</p>
+    <h3>Chatrooms</h3>
+    <ul>
+      <li><a href="/chatrooms/hangout">Hangout</a></li>
+      <li><a href="/chatrooms/theater_and_co">Theater & co</a></li>
+      <li><a href="/chatrooms/lectures">Lectures</a></li>
+    </ul>
   </div>
 </body>
