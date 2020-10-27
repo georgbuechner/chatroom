@@ -46,7 +46,7 @@ void ServerFrame::Start(int port) {
         resp.set_content(func::GetPage("web/registration.html"), "text/html") ;});
   server_.Get("/chatrooms", [&](const Request& req, Response& resp) { 
         if (CheckLoggedIn(req) != "") {
-          resp.set_content(func::GetPage("web/chatroom.html"), "text/html") ;
+          resp.set_content(func::GetPage("web/chatrooms.html"), "text/html") ;
           resp.status = 200;
         }
         else {
