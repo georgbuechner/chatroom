@@ -8,6 +8,9 @@
 using namespace httplib;
 
 ServerFrame::ServerFrame() {
+  chatrooms_["lectures"] = std::vector<message>();
+  chatrooms_["theater_and_co"] = std::vector<message>();
+  chatrooms_["hangouts"] = std::vector<message>();
 }
 
 void ServerFrame::Start(int port) {
@@ -165,15 +168,29 @@ void ServerFrame::DoRegistration(const Request& req, Response& resp) {
 void ServerFrame::Send(const Request& req, Response& resp) {
   std::string username = CheckLoggedIn(req);
   if (username == "") {
-    std::cout << "No Cookie!" << std::endl;
     resp.status = 401;
+    return;
   }
 
+  //Try to parse request
+  std::string room, message;
+  try {
+    nlohmann::json request = nlohmann::json::parse(req.body);
+    room = request["room"];
+    message = request["msg"];
+  }
+  catch (std::exception& e) {
+    std::cout << "Send: error parsing json: " << e.what() << std::endl;
+    resp.status = 401;
+    return;
+  }
+
+  //Check if room exists, then add to room.
+  std::unique_lock ul(shared_mutex_chatroom_);
+  if (chatrooms_.count(room) == 0)
+    resp.status = 401;
   else {
-    std::unique_lock ul(shared_mutex_chatroom_);
-    std::string msg = req.body;
-    chatroom_.push_back(std::make_pair(username, msg));
-    ul.unlock();
+    chatrooms_.at(room).push_back(std::make_pair(username, message));
     resp.status = 200;
   }
 }
@@ -181,15 +198,29 @@ void ServerFrame::Send(const Request& req, Response& resp) {
 void ServerFrame::Get(const Request& req, Response& resp) {
   std::string username = CheckLoggedIn(req);
   if (username == "") {
-    std::cout << "No Cookie!" << std::endl;
     resp.status = 401;
+    return;
   }
-
+  
+  //Try to parse request
+  std::string room = "";
+  try {
+    nlohmann::json request = nlohmann::json::parse(req.body);
+    room = request["room"];
+  }
+  catch (std::exception& e) {
+    std::cout << "Get: error parsing json: " << e.what() << std::endl;
+    resp.status = 401;
+    return;
+  }
+  
+  //Check if room exists, then add to room.
+  std::shared_lock sl(shared_mutex_chatroom_);
+  if (chatrooms_.count(room) == 0)
+    resp.status = 401;
   else {
-    std::shared_lock sl(shared_mutex_chatroom_);
-    nlohmann::json response = chatroom_;
+    nlohmann::json response = chatrooms_[room];
     resp.set_content(response.dump(), "text/txt");
-    sl.unlock();
     resp.status = 200;
   }
 }
