@@ -1,6 +1,6 @@
 # chatroom
 A simple webserver in which you can log into and start chatting. 
-This repository mainly aims to use and experiment with various DevOps like automated Tests, github-actions and continus integraion and further more. 
+This repository mainly aims to use and experiment with various DevOps like automated Tests, github-actions and continuos integraion/ delivery and further more. 
 
 ## What we're using here...
 
