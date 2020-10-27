@@ -112,7 +112,6 @@ void ServerFrame::DoLogin(const Request& req, Response& resp) {
     resp.set_content("Login failed.", "application/json");
   }
   else {
-    resp.status = 200;
     std::string cookie = "SESSID=" + user_manager_.GenerateCookie(username)                         
        + "; Path=/";
     resp.set_header("Set-Cookie", cookie.c_str());  

@@ -154,12 +154,16 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           httplib::Headers headers = { { "Cookie", cookie } };
           auto resp = cl.Get("/chatrooms", headers);
           REQUIRE(resp->status == 200);
+          REQUIRE(resp->body.length() > 0);
           resp = cl.Get("/chatrooms/theater_and_co", headers);
           REQUIRE(resp->status == 200);
+          REQUIRE(resp->body.length() > 0);
           resp = cl.Get("/chatrooms/lectures", headers);
           REQUIRE(resp->status == 200);
+          REQUIRE(resp->body.length() > 0);
           resp = cl.Get("/chatrooms/hangouts", headers);
           REQUIRE(resp->status == 200);
+          REQUIRE(resp->body.length() > 0);
         }
         server.Stop();
     });
