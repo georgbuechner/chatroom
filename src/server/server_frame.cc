@@ -33,23 +33,40 @@ void ServerFrame::Start(int port) {
   server_.Get("/", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/index.html"), "text/html") ;});
   server_.Get("/login", [&](const Request& req, Response& resp) { 
-        if (CheckLoggedIn(req) == "")
+        if (CheckLoggedIn(req) == "") {
+          resp.status = 200;
           resp.set_content(func::GetPage("web/login.html"), "text/html");
+        }
         else {
           resp.status = 302;
-          resp.set_header("Location", "/chatroom");
+          resp.set_header("Location", "/chatrooms");
         }
       });
   server_.Get("/registration", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/registration.html"), "text/html") ;});
-  server_.Get("/chatroom", [&](const Request& req, Response& resp) { 
-        if (CheckLoggedIn(req) != "")
+  server_.Get("/chatrooms", [&](const Request& req, Response& resp) { 
+        if (CheckLoggedIn(req) != "") {
           resp.set_content(func::GetPage("web/chatroom.html"), "text/html") ;
+          resp.status = 200;
+        }
+        else {
+          resp.set_header("Location", "/login");
+          resp.status = 302;
+        }
+      });
+  server_.Get("/chatrooms/(.*)", [&](const Request& req, Response& resp) { 
+        if (CheckLoggedIn(req) != "") {
+          std::string chatroom = req.matches[1];
+          std::cout << "Loading: " << chatroom + ".html" << std::endl;
+          resp.set_content(func::GetPage("web/"+chatroom+".html"), "text/html") ;
+          resp.status = 200;
+        }
         else {
           resp.status = 302;
           resp.set_header("Location", "/login");
         }
       });
+
   server_.Get("/web/general.css", [&](const Request& req, Response& resp) { 
         resp.set_content(func::GetPage("web/general.css"), "text/css") ;});
   server_.Get("/web/login.js", [&](const Request& req, Response& resp) { 

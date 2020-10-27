@@ -133,12 +133,34 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           REQUIRE(server.user_manager().GetUsernameFromCookie(cookie.c_str()) == "");
         }
 
-        SECTION("Post-Requests to handle login works") {
+        SECTION("Get-Requests to chatrooms get redirected if user is not logged in.") {
           //Require that user will be redirected to login-page, when not logged.
-          auto resp = cl.Get("/chatroom");
+          auto resp = cl.Get("/chatrooms");
+          REQUIRE(resp->status == 302);
+          resp = cl.Get("/chatrooms/theater_and_co");
+          REQUIRE(resp->status == 302);
+          resp = cl.Get("/chatrooms/lectures");
+          REQUIRE(resp->status == 302);
+          resp = cl.Get("/chatrooms/hangouts");
           REQUIRE(resp->status == 302);
         }
 
+        SECTION("Get-Requests to chatrooms won't get redirected if user is "
+            "not logged in.") {
+          //Require that user will be redirected to login-page, when not logged.
+          std::string cookie = "SESSID=" + server.user_manager().
+            GenerateCookie("test6");
+          std::cout << "Cookie: " << cookie << std::endl;
+          httplib::Headers headers = { { "Cookie", cookie } };
+          auto resp = cl.Get("/chatrooms", headers);
+          REQUIRE(resp->status == 200);
+          resp = cl.Get("/chatrooms/theater_and_co", headers);
+          REQUIRE(resp->status == 200);
+          resp = cl.Get("/chatrooms/lectures", headers);
+          REQUIRE(resp->status == 200);
+          resp = cl.Get("/chatrooms/hangouts", headers);
+          REQUIRE(resp->status == 200);
+        }
         server.Stop();
     });
   t1.join();
