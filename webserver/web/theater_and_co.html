@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Chatroom</title>
+    <title>Theater</title>
 
     <!-- <link href="/favicon.png" rel="icon" type="image/png"/> -->
 
@@ -11,7 +11,7 @@
     <link href="/web/general.css" rel="stylesheet">
 
     <!-- javascript -->
-    <script src="web/chatroom.js"></script>
+    <script src="/web/chatroom.js"></script>
 </head>
 
 <body>
@@ -20,13 +20,16 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/">Home</a></li>
       <li class="breadcrumb-item"><a href="/login">Login</a></li>
-      <li class="breadcrumb-item active"><a href="/login">Chatroom</a></li>
+      <li class="breadcrumb-item"><a href="/chatrooms">Chatrooms</a></li>
+      <li class="breadcrumb-item active"><a href="">Theater</a></li>
     </ol>
   </nav>
 
   <div class="chatroom">
-    <h3>Chatroom</h3>
+    <h3>Theater</h3>
     <div id="chatroom"></div>
+    <br>
+    <br>
     <input id="msg" placeholder="type a message"><br><br>
     <button type="button" class="chatroom_button" onclick="Send()">Send</button>
     <button type="button" class="chatroom_button" onclick="Logout()">Logout</button><br>

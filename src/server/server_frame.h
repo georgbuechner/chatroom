@@ -91,7 +91,7 @@ class ServerFrame {
     UserManager user_manager_; //Manages users.
     mutable std::shared_mutex shared_mutex_user_manager_;
     typedef std::pair<std::string, std::string> message;
-    std::vector<message> chatroom_;
+    std::map<std::string, std::vector<message>> chatrooms_;
     mutable std::shared_mutex shared_mutex_chatroom_;
 };
 

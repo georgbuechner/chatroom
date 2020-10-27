@@ -34,7 +34,7 @@ function DoLogin() {
       document.getElementById("login_error").style.display="block";
     }
     else {
-      window.location.href="/chatroom";
+      window.location.href="/chatrooms";
     }                            
   };                   
 }

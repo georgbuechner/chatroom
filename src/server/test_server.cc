@@ -116,27 +116,67 @@ TEST_CASE ("server frame can handle post and get requests", "[requests]" ) {
           //Create headers with current cookie
           httplib::Headers headers = { { "Cookie", cookie } };
 
-          //Check if user can send messages.
-          resp = cl.Post("/api/send_msg", headers, "Hello, you", 
-              "application/x-www-form-urlencoded");
-          REQUIRE(resp->status == 200);
-
-          resp = cl.Post("/api/get_msgs", headers, "Hello, you", 
-              "application/x-www-form-urlencoded");
-          REQUIRE(resp->status == 200);
-          std::cout << "Messagejson: " << resp->body << std::endl;
-          REQUIRE(resp->body.find("Hello, you") != std::string::npos);
-
+          
           //Log this user out.
           resp = cl.Post("/api/logout", headers, "", "application/x-www-form-urlencoded");
           REQUIRE(resp->status == 200);
           REQUIRE(server.user_manager().GetUsernameFromCookie(cookie.c_str()) == "");
         }
 
-        SECTION("Post-Requests to handle login works") {
+        SECTION("Get-Requests to chatrooms get redirected if user is not logged in.") {
           //Require that user will be redirected to login-page, when not logged.
-          auto resp = cl.Get("/chatroom");
+          auto resp = cl.Get("/chatrooms");
           REQUIRE(resp->status == 302);
+          resp = cl.Get("/chatrooms/theater_and_co");
+          REQUIRE(resp->status == 302);
+          resp = cl.Get("/chatrooms/lectures");
+          REQUIRE(resp->status == 302);
+          resp = cl.Get("/chatrooms/hangouts");
+          REQUIRE(resp->status == 302);
+        }
+
+        SECTION("Get-Requests to chatrooms won't get redirected if user is "
+            "not logged in.") {
+          //Create a cookie and check if user request get accepted.
+          std::string cookie = "SESSID=" + server.user_manager().
+            GenerateCookie("test6");
+          httplib::Headers headers = { { "Cookie", cookie } };
+          auto resp = cl.Get("/chatrooms", headers);
+          REQUIRE(resp->status == 200);
+          REQUIRE(resp->body.length() > 0);
+          resp = cl.Get("/chatrooms/theater_and_co", headers);
+          REQUIRE(resp->status == 200);
+          REQUIRE(resp->body.length() > 0);
+          resp = cl.Get("/chatrooms/lectures", headers);
+          REQUIRE(resp->status == 200);
+          REQUIRE(resp->body.length() > 0);
+          resp = cl.Get("/chatrooms/hangouts", headers);
+          REQUIRE(resp->status == 200);
+          REQUIRE(resp->body.length() > 0);
+        }
+
+        SECTION("Sending and retrieving messages is working") {
+          //Create cookie
+          std::string cookie = "SESSID=" + server.user_manager().
+            GenerateCookie("test6");
+          httplib::Headers headers = { { "Cookie", cookie } };
+
+          //Check if user can send messages.
+          auto resp = cl.Post("/api/send_msg", headers, "{\"room\":\"hangouts\","
+              "\"msg\":\"Hello, you\"}", "application/x-www-form-urlencoded");
+          REQUIRE(resp->status == 200);
+
+          //Request coming from hangouts should be okay and contain message.
+          resp = cl.Post("/api/get_msgs", headers, "{\"room\":\"hangouts\"}", 
+              "application/x-www-form-urlencoded");
+          REQUIRE(resp->status == 200);
+          REQUIRE(resp->body.find("Hello, you") != std::string::npos);
+          
+          //Request coming from lectures should be okay but NOT contain message.
+          resp = cl.Post("/api/get_msgs", headers, "{\"room\":\"lectures\"}", 
+              "application/x-www-form-urlencoded");
+          REQUIRE(resp->status == 200);
+          REQUIRE(resp->body.find("Hello, you") == std::string::npos);
         }
 
         server.Stop();
