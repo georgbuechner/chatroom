@@ -1,3 +1,17 @@
+/**
+ * Triggers button-click by pressing enter, when on input field and sets
+ * focus on input field.
+ */
+window.onload = function() {
+  var input = document.getElementById("msg");
+  input.focus();
+  input.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      document.getElementById("send_msg").click();
+    }
+  });
+}
 
 //Sends request to server and loads chatroom if request is successful.
 function Logout() {
