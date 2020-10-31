@@ -42,7 +42,7 @@ function DoRegisttration() {
     }
     else {
       SetColorAll("green");
-      window.location.href="/chatroom";
+      window.location.href="/chatrooms";
     }                            
   };                   
 }
